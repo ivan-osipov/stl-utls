@@ -4,7 +4,7 @@ import stlutils.common.Triangle
 
 private val SOLID_TOKEN = "solid ".toByteArray()
 
-class StlParsingManager(val normalPolicy: NormalPolicy = NormalPolicy.MIXED) {
+class StlParsingManager(private val normalPolicy: NormalPolicy = NormalPolicy.MIXED) {
 
     fun parse(bytes: ByteArray): List<Triangle> {
         val ascii = (0 until SOLID_TOKEN.size).all {

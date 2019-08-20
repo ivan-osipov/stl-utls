@@ -1,15 +1,13 @@
 package stlutils.parser
 
-import stlutils.common.Triangle
-import stlutils.common.Vector3d
+import stlutils.common.*
 import stlutils.util.toFloat
 import stlutils.util.toInt
 import java.io.ByteArrayInputStream
 import java.io.InputStreamReader
 import java.io.StreamTokenizer
 import java.io.StreamTokenizer.*
-import java.nio.ByteOrder
-import java.nio.ByteOrder.*
+import java.nio.ByteOrder.LITTLE_ENDIAN
 import java.nio.charset.Charset
 
 internal sealed class StlParser(private val normalPolicy: NormalPolicy) {
@@ -18,7 +16,7 @@ internal sealed class StlParser(private val normalPolicy: NormalPolicy) {
     fun computeNormal(a: Vector3d, b: Vector3d, c: Vector3d, normal: Vector3d): Vector3d {
         return when (normalPolicy) {
             NormalPolicy.STRICTLY_INHERITED -> {
-                require(!normal.isZero) { "Normal is undefined $normal and not computed"}
+                require(!normal.isZero) { "Normal is undefined $normal and not computed" }
                 normal
             }
             NormalPolicy.INHERITED -> normal
@@ -47,11 +45,11 @@ internal class StlBinaryParser(normalPolicy: NormalPolicy) : StlParser(normalPol
                 val b = collectVector(bytes, it + SINGLE_VECTOR_BYTES_QUANTITY * 2)
                 val c = collectVector(bytes, it + SINGLE_VECTOR_BYTES_QUANTITY * 3)
                 val normal = computeNormal(a, b, c, collectVector(bytes, it))
-                Triangle(normal, a, b, c)
+                SimpleTriangle(normal, a, b, c)
             }.toCollection(ArrayList(facesQuantity))
     }
 
-    private fun collectVector(bytes: ByteArray, from: Int) = Vector3d(
+    private fun collectVector(bytes: ByteArray, from: Int): Vector3d = SimpleVector3d(
         bytes.sliceArray(from..from + 3).toFloat(LITTLE_ENDIAN),
         bytes.sliceArray(from + 4..from + 7).toFloat(LITTLE_ENDIAN),
         bytes.sliceArray(from + 8..from + 11).toFloat(LITTLE_ENDIAN)
@@ -73,7 +71,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
         val tokenizer = StreamTokenizer(InputStreamReader(ByteArrayInputStream(bytes), Charset.forName("ASCII")))
 
         var parsingStep = ParsingStep.NORMAL
-        var triangleBuilder: TriangleBuilder = TriangleBuilder()
+        var triangleBuilder = TriangleBuilder()
         while (true) {
             when (tokenizer.nextToken()) {
                 TT_EOF -> return triangles
@@ -85,7 +83,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
                             val y = tokenizer.nval.toFloat()
                             tokenizer.nextToken()
                             val z = tokenizer.nval.toFloat()
-                            triangleBuilder.normal = Vector3d(x, y, z)
+                            triangleBuilder.normal = SimpleVector3d(x, y, z)
                         }
                         ParsingStep.V_0 -> {
                             val x = tokenizer.nval.toFloat()
@@ -93,7 +91,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
                             val y = tokenizer.nval.toFloat()
                             tokenizer.nextToken()
                             val z = tokenizer.nval.toFloat()
-                            triangleBuilder.a = Vector3d(x, y, z)
+                            triangleBuilder.a = SimpleVector3d(x, y, z)
                         }
                         ParsingStep.V_1 -> {
                             val x = tokenizer.nval.toFloat()
@@ -101,7 +99,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
                             val y = tokenizer.nval.toFloat()
                             tokenizer.nextToken()
                             val z = tokenizer.nval.toFloat()
-                            triangleBuilder.b = Vector3d(x, y, z)
+                            triangleBuilder.b = SimpleVector3d(x, y, z)
                         }
                         ParsingStep.V_2 -> {
                             val x = tokenizer.nval.toFloat()
@@ -109,7 +107,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
                             val y = tokenizer.nval.toFloat()
                             tokenizer.nextToken()
                             val z = tokenizer.nval.toFloat()
-                            triangleBuilder.c = Vector3d(x, y, z)
+                            triangleBuilder.c = SimpleVector3d(x, y, z)
                         }
                     }
                 }
@@ -139,7 +137,7 @@ internal class StlAsciiParser(normalPolicy: NormalPolicy) : StlParser(normalPoli
         lateinit var b: Vector3d
         lateinit var c: Vector3d
 
-        fun build() = Triangle(computeNormal(a, b, c, normal), a, b, c)
+        fun build(): Triangle = SimpleTriangle(computeNormal(a, b, c, normal), a, b, c)
     }
 
     companion object {

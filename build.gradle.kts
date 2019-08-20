@@ -5,20 +5,32 @@ plugins {
 }
 
 group = "ru.i-osipov"
-version = "1.0-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 tasks.withType<Test> {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        includeEngines("spek2")
+    }
+}
+
+object Versions {
+    const val spek = "2.0.0"
+    const val junit = "5.3.1"
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.1")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${Versions.junit}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Versions.junit}")
+
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.spek}")
+    testRuntimeOnly(kotlin("reflect"))
 }
 
 tasks.withType<KotlinCompile> {
