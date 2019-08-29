@@ -2,7 +2,7 @@ package stlutils.optimization.stlReducer
 
 import stlutils.common.Triangle
 
-class GraphDataCollector {
+internal class GraphDataCollector {
     fun collect(triangles: List<Triangle>): GraphData {
         return triangles.fold(
             GraphDataBuilder(

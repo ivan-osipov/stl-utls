@@ -3,7 +3,7 @@ package stlutils.optimization.stlReducer
 import stlutils.common.SimpleTriangle
 import stlutils.common.SimpleVector3d
 
-fun emptyGraphData() = GraphData(
+internal fun emptyGraphData() = GraphData(
     GraphData.Source(emptyList(), emptyList()),
     GraphData.Mappings(
         emptyArray(),
@@ -16,7 +16,7 @@ fun emptyGraphData() = GraphData(
     )
 )
 
-fun oneTriangleGraphData() = GraphDataCollector().collect(
+internal fun oneTriangleGraphData() = GraphDataCollector().collect(
     listOf(
         SimpleTriangle(
             SimpleVector3d(0f, 0f, 1f),
@@ -27,7 +27,7 @@ fun oneTriangleGraphData() = GraphDataCollector().collect(
     )
 )
 
-fun eightTrianglesGraphData() = GraphDataCollector().collect(
+internal fun eightTrianglesGraphData() = GraphDataCollector().collect(
     listOf(
         SimpleTriangle(
             SimpleVector3d(0f, 0f, 1f),

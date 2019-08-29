@@ -38,7 +38,7 @@ class ViewerApp : Application() {
     }
 
     private fun reduceTriangles(triangles: List<Triangle>): List<Triangle> {
-        return StlReducer().reduce(triangles)
+        return StlReducer().reduce(triangles, triangles.size / 2)
     }
 
     private fun create3dView(triangles: List<Triangle>): Node {

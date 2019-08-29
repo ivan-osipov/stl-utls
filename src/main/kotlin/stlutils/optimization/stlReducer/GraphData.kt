@@ -2,7 +2,7 @@ package stlutils.optimization.stlReducer
 
 import stlutils.common.Triangle
 
-data class GraphData(
+internal data class GraphData(
     val source: Source,
     val mappings: Mappings
 ) {

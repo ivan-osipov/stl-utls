@@ -4,7 +4,7 @@ import stlutils.common.*
 import kotlin.math.max
 import kotlin.math.min
 
-class SupportVerticesComputer(private val data: GraphData) {
+internal class SupportVerticesComputer(private val data: GraphData) {
     fun compute(
         accuracyCoefX: Int = 1,
         accuracyCoefY: Int = 1,
