@@ -18,7 +18,7 @@ tasks.withType<Test> {
 }
 
 object Versions {
-    const val spek = "2.0.0"
+    const val spek = "2.0.6"
     const val junit = "5.3.1"
 }
 

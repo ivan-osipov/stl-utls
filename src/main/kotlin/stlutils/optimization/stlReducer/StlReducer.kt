@@ -11,7 +11,7 @@ class StlReducer {
 
         val graphData = GraphDataCollector().collect(triangles)
 
-        val supportVertices = SupportVerticesComputer(graphData).compute()
+        val supportVertices = SupportVerticesComputer(graphData).compute(64, 64, 64)
 
         return Reducer(graphData, supportVertices).reduce(triangles.size / 2)
     }

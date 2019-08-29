@@ -1,5 +1,6 @@
 package stlutils.common
 
+import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 operator fun Vector3d.minus(other: Vector3d): Vector3d = SimpleVector3d(x - other.x, y - other.y, z - other.z)
@@ -14,6 +15,8 @@ fun Vector3d.normalize(): Vector3d {
     val norm = 1 / length()
     return SimpleVector3d(x * norm, y * norm, z * norm)
 }
+
+fun Vector3d.abs(): Vector3d = SimpleVector3d(x.absoluteValue, y.absoluteValue, z.absoluteValue)
 
 infix fun Vector3d.cross(b: Vector3d): Vector3d = SimpleVector3d(
     x = y * b.z - z * b.y,

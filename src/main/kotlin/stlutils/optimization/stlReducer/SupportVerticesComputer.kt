@@ -4,10 +4,15 @@ import stlutils.common.*
 import kotlin.math.max
 import kotlin.math.min
 
-class SupportVerticesComputer(val data: GraphData) {
-    fun compute(): Set<VertexIdx> {
+class SupportVerticesComputer(private val data: GraphData) {
+    fun compute(
+        accuracyCoefX: Int = 1,
+        accuracyCoefY: Int = 1,
+        accuracyCoefZ: Int = 1
+    ): Set<VertexIdx> {
+        if (data.source.triangles.isEmpty()) return emptySet()
         val boundingBox = computeBoundingBox()
-        val partialBoundingBoxes = splitBoundingBox(boundingBox, 4)
+        val partialBoundingBoxes = splitBoundingBox(boundingBox, accuracyCoefX, accuracyCoefY, accuracyCoefZ)
         val vectorsByBoxes = data.source.vertices.groupByBoxes(partialBoundingBoxes)
         return vectorsByBoxes.findSupportVertices(partialBoundingBoxes)
             .mapTo(HashSet()) { data.mappings.verticesIndices.getValue(it) }
@@ -30,19 +35,33 @@ class SupportVerticesComputer(val data: GraphData) {
 
     private fun splitBoundingBox(
         boundingBox: BoundingBox,
-        sectionsQuantity: Int
+        accuracyCoefX: Int,
+        accuracyCoefY: Int,
+        accuracyCoefZ: Int
     ): MutableList<BoundingBox> {
         val (minVector, maxVector) = boundingBox
-        val stepVector =
-            (minVector + maxVector) / (2f * sectionsQuantity) //TODO possible to use differently devided volumes
+        val diagonal = minVector.abs() + maxVector.abs()
+        val stepVector = SimpleVector3d(
+            diagonal.x / accuracyCoefX,
+            diagonal.y / accuracyCoefY,
+            diagonal.z / accuracyCoefZ
+        )
         val boundingBoxes = mutableListOf<BoundingBox>()
-        for (i in (0 until sectionsQuantity)) {
-            for (j in (0 until sectionsQuantity)) {
-                for (k in (0 until sectionsQuantity)) {
+        for (i in (0 until accuracyCoefX)) {
+            for (j in (0 until accuracyCoefY)) {
+                for (k in (0 until accuracyCoefZ)) {
                     boundingBoxes.add(
                         BoundingBox(
-                            SimpleVector3d(stepVector.x * i, stepVector.y * j, stepVector.z * k),
-                            SimpleVector3d(stepVector.x * (i + 1), stepVector.y * (j + 1), stepVector.z * (k + 1))
+                            SimpleVector3d(
+                                minVector.x + stepVector.x * i,
+                                minVector.y + stepVector.y * j,
+                                minVector.z + stepVector.z * k
+                            ),
+                            SimpleVector3d(
+                                minVector.x + stepVector.x * (i + 1),
+                                minVector.y + stepVector.y * (j + 1),
+                                minVector.z + stepVector.z * (k + 1)
+                            )
                         )
                     )
                 }
