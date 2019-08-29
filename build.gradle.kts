@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.41"
+    kotlin("jvm") version "1.3.50"
 }
 
 group = "ru.i-osipov"
@@ -38,5 +38,5 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "5.5.1"
+    gradleVersion = "5.6"
 }
