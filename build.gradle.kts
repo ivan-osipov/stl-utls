@@ -20,6 +20,7 @@ tasks.withType<Test> {
 object Versions {
     const val spek = "2.0.6"
     const val junit = "5.3.1"
+    const val mockito = "2.2.0"
 }
 
 dependencies {
@@ -29,6 +30,7 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${Versions.junit}")
 
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:${Versions.spek}")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:${Versions.mockito}")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.spek}")
     testRuntimeOnly(kotlin("reflect"))
 }

@@ -33,7 +33,7 @@ operator fun Vector3d.div(scalar: Float): Vector3d = SimpleVector3d(x / scalar, 
 val Vector3d.isZero: Boolean
     get() = x == 0f && y == 0f && z == 0f
 
-
 fun computeRightHandNormal(a: Vector3d, b: Vector3d, c: Vector3d): Vector3d {
+    require(setOf(a, b, c).size == 3) { "Not unique vectors ${listOf(a, b, c)}" }
     return ((b - a) cross (c - a)).normalize()
 }

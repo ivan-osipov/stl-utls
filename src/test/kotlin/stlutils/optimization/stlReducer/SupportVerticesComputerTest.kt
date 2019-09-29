@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.gherkin.Feature
 
-class SupportVerticesComputerTests : Spek({
+class SupportVerticesComputerTest : Spek({
     Feature("SupportVerticesComputer") {
         Scenario("computes support vertices for empty input") {
             lateinit var supportVertices: Set<VertexIdx>

@@ -7,7 +7,7 @@ import org.spekframework.spek2.style.gherkin.Feature
 import stlutils.common.SimpleTriangle
 import stlutils.common.SimpleVector3d
 
-class GraphDataCollectorTests : Spek({
+class GraphDataCollectorTest : Spek({
 
     Feature("GraphDataCollector") {
         val graphDataCollector by memoized { GraphDataCollector() }

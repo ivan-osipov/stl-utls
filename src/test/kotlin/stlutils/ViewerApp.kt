@@ -13,9 +13,11 @@ import javafx.scene.shape.TriangleMesh
 import javafx.stage.Stage
 import stlutils.common.SimpleVector3d
 import stlutils.common.Triangle
-import stlutils.optimization.stlReducer.StlReducer
+import stlutils.optimization.stlReducer.TriangleMeshReducer
 import stlutils.parser.NormalPolicy
 import stlutils.parser.StlParsingManager
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTimedValue
 
 
 class ViewerApp : Application() {
@@ -26,6 +28,7 @@ class ViewerApp : Application() {
         }
     }
 
+    @ExperimentalTime
     override fun start(primaryStage: Stage) {
         primaryStage.title = "3D"
         val root = FlowPane(Orientation.HORIZONTAL)
@@ -37,8 +40,18 @@ class ViewerApp : Application() {
         primaryStage.show()
     }
 
+    @ExperimentalTime
     private fun reduceTriangles(triangles: List<Triangle>): List<Triangle> {
-        return StlReducer().reduce(triangles, triangles.size / 2)
+        return measureTimedValue {
+            println("On start: ${triangles.size} triangles")
+            val targetTrianglesQuantity = (triangles.size * 0.5).toInt()
+            println("Target: $targetTrianglesQuantity")
+            TriangleMeshReducer().reduce(triangles, targetTrianglesQuantity)
+        }.let {
+            println(it.duration)
+            println("Triangles: ${it.value.size}")
+            it.value
+        }
     }
 
     private fun create3dView(triangles: List<Triangle>): Node {

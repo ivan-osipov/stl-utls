@@ -1,6 +1,6 @@
 package stlutils.optimization.stlReducer
 
-inline fun <T, R : Comparable<R>> Iterable<T>.extremePointsBy(selector: (T) -> R): Pair<T, T>? {
+internal inline fun <T, R : Comparable<R>> Iterable<T>.extremePointsBy(selector: (T) -> R): Pair<T, T>? {
     val iterator = iterator()
     if (!iterator.hasNext()) return null
     var minElem = iterator.next()

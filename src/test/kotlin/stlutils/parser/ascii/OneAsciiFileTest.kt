@@ -7,10 +7,11 @@ import stlutils.common.SimpleVector3d
 import stlutils.parser.NormalPolicy
 import stlutils.parser.StlParsingManager
 
-class OneAsciiFileTests {
+class OneAsciiFileTest {
+
     @Test
     fun `parses simple file`() {
-        val bytes = OneAsciiFileTests::class.java.getResourceAsStream("one_polygon.stl").readBytes()
+        val bytes = OneAsciiFileTest::class.java.getResourceAsStream("one_polygon.stl").readBytes()
         val parsingResults = StlParsingManager(NormalPolicy.COMPUTED).parse(bytes)
         assertEquals(1, parsingResults.size)
         assertEquals(
